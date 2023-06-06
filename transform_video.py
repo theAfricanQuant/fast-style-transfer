@@ -6,7 +6,7 @@ import os, random, subprocess, evaluate, shutil
 from utils import exists, list_files
 import pdb
 
-TMP_DIR = '.fns_frames_%s/' % random.randint(0,99999)
+TMP_DIR = f'.fns_frames_{random.randint(0, 99999)}/'
 DEVICE = '/gpu:0'
 BATCH_SIZE = 4
 

@@ -39,15 +39,12 @@ def optimize(content_targets, style_target, content_weight, style_weight,
             gram = np.matmul(features.T, features) / features.size
             style_features[layer] = gram
 
-    with tf.Graph().as_default(), tf.Session() as sess:
+    with (tf.Graph().as_default(), tf.Session() as sess):
         X_content = tf.placeholder(tf.float32, shape=batch_shape, name="X_content")
         X_pre = vgg.preprocess(X_content)
 
-        # precompute content features
-        content_features = {}
         content_net = vgg.net(vgg_path, X_pre)
-        content_features[CONTENT_LAYER] = content_net[CONTENT_LAYER]
-
+        content_features = {CONTENT_LAYER: content_net[CONTENT_LAYER]}
         if slow:
             preds = tf.Variable(
                 tf.random_normal(X_content.get_shape()) * 0.256
@@ -92,7 +89,7 @@ def optimize(content_targets, style_target, content_weight, style_weight,
         sess.run(tf.global_variables_initializer())
         import random
         uid = random.randint(1, 100)
-        print("UID: %s" % uid)
+        print(f"UID: {uid}")
         for epoch in range(epochs):
             num_examples = len(content_targets)
             iterations = 0
@@ -115,8 +112,8 @@ def optimize(content_targets, style_target, content_weight, style_weight,
                 end_time = time.time()
                 delta_time = end_time - start_time
                 if debug:
-                    print("UID: %s, batch time: %s" % (uid, delta_time))
-                is_print_iter = int(iterations) % print_iterations == 0
+                    print(f"UID: {uid}, batch time: {delta_time}")
+                is_print_iter = iterations % print_iterations == 0
                 if slow:
                     is_print_iter = epoch % print_iterations == 0
                 is_last = epoch == epochs - 1 and iterations * batch_size >= num_examples

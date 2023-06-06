@@ -142,7 +142,7 @@ def ffwd_different_dimensions(in_path, out_path, checkpoint_dir,
         in_path_of_shape[shape].append(in_image)
         out_path_of_shape[shape].append(out_image)
     for shape in in_path_of_shape:
-        print('Processing images of shape %s' % shape)
+        print(f'Processing images of shape {shape}')
         ffwd(in_path_of_shape[shape], out_path_of_shape[shape], 
             checkpoint_dir, device_t, batch_size)
 

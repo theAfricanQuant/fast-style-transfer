@@ -14,8 +14,7 @@ def net(image):
     conv_t1 = _conv_tranpose_layer(resid5, 64, 3, 2)
     conv_t2 = _conv_tranpose_layer(conv_t1, 32, 3, 2)
     conv_t3 = _conv_layer(conv_t2, 3, 9, 1, relu=False)
-    preds = tf.nn.tanh(conv_t3) * 150 + 255./2
-    return preds
+    return tf.nn.tanh(conv_t3) * 150 + 255./2
 
 def _conv_layer(net, num_filters, filter_size, strides, relu=True):
     weights_init = _conv_init_vars(net, num_filters, filter_size)
@@ -63,5 +62,7 @@ def _conv_init_vars(net, out_channels, filter_size, transpose=False):
     else:
         weights_shape = [filter_size, filter_size, out_channels, in_channels]
 
-    weights_init = tf.Variable(tf.truncated_normal(weights_shape, stddev=WEIGHTS_INIT_STDEV, seed=1), dtype=tf.float32)
-    return weights_init
+    return tf.Variable(
+        tf.truncated_normal(weights_shape, stddev=WEIGHTS_INIT_STDEV, seed=1),
+        dtype=tf.float32,
+    )
